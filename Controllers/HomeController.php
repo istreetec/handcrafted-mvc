@@ -71,17 +71,27 @@ class HomeController
     // Always have a server validation in place
     public function upload(): void
     {
-        echo "<pre>";
-        var_dump($_FILES);
-        echo "</pre>";
-
-        // By default PHP uploaded files are store in /tmp directory.
+        // By default PHP uploaded files are stored in /tmp directory.
         // They can be moved to desired location afterwards
         $filePath = STORAGE_PATH . '/' . $_FILES["receipt"]["tmp_name"];
-        move_uploaded_file($_FILES["receipt"]["tmp_name"], $filePath);
+        // move_uploaded_file($_FILES["receipt"]["tmp_name"], $filePath);
+        // var_dump(pathinfo($filePath));
 
-        echo "<pre>";
-        var_dump(pathinfo($filePath));
-        echo "</pre>";
+
+        // Use location header to redirect the user to a new route once done
+        // E.g. redirect them to home page
+        header('Location: /');
+
+        // Tip:: After redirecting. Always exit the script to avoid code 
+        // below it executing since you have already redirected.
+        exit;
+    }
+
+
+    public function download(): void
+    {
+        header("Content-Type: application/pdf");
+        header("Content-Disposition: attachment;filename=myfile.pdf");
+        readfile(STORAGE_PATH . '/receipt.pdf');
     }
 }

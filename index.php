@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App;
 
+use App\Exceptions\RouteNotFoundException;
 use App\Controllers\{HomeController, InvoiceController};
 
 // Super Globals Usage;;
@@ -27,18 +28,27 @@ define("VIEW_PATH", __DIR__ . "/Views");
 
 $route = new Router();
 
-// Register Routes
-$route->get("/", [HomeController::class, "index"])
-    ->get("/upload", [HomeController::class, "prepareUploads"])
-    ->post("/upload", [HomeController::class, "upload"])
-    ->get("/invoices", [InvoiceController::class, "index"])
-    ->get("/invoices/create", [InvoiceController::class, "create"])
-    ->post("/invoices/create", [InvoiceController::class, "store"]);
 
-echo $route->resolve(
-    $_SERVER['REQUEST_URI'],
-    strtolower($_SERVER['REQUEST_METHOD']) // e.g. get and post
-);
+try {
+    // Register Routes
+    $route->get("/", [HomeController::class, "index"])
+        ->get("/upload", [HomeController::class, "prepareUploads"])
+        ->get("/download", [HomeController::class, "download"])
+        ->post("/upload", [HomeController::class, "upload"])
+        ->get("/invoices", [InvoiceController::class, "index"])
+        ->get("/invoices/create", [InvoiceController::class, "create"])
+        ->post("/invoices/create", [InvoiceController::class, "store"]);
+
+    echo $route->resolve(
+        $_SERVER['REQUEST_URI'],
+        strtolower($_SERVER['REQUEST_METHOD']) // e.g. get and post
+    );
+} catch (RouteNotFoundException $e) {
+    // NB:: HTTP Headers e.g. status codes should be send before any output
+    http_response_code(404);
+
+    echo (string) View::make("error/404");
+}
 
 
 // Cookies;;
