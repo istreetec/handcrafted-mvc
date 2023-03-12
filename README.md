@@ -29,5 +29,15 @@ retrieve data from the datastore and send it back to the controller.
 
 - View then renders/display it to the screen
 
+#### Best Practice
+
+- Controllers should be kept as lean as possible.
+
+- Validation Logic should be extracted to sub-controllers e.g. Request classes
+where all the noise should be processed.
+
+- Then their result imported into the actual controllers which pass it down
+into Models or Views.
+
 
 ![MVC Image](/MVC.png "MVC Diagram").

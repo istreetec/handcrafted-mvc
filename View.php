@@ -35,6 +35,9 @@ class View
 
         // NB:: anything between ob_start() and ob_get_clean() is buffered.
         // Include a file containing HTML Markup
+
+        // Tip:: the view file has access to $this property thus it can be 
+        // used to access params from View class.
         include $viewPath;
 
         // Now return the buffer's content as string
@@ -45,7 +48,7 @@ class View
     // after it's instance being type casted to string.
     public function __toString(): string
     {
-        echo "Invoked by View Instance" . "<br/>";
+        // echo "Invoked by View Instance" . "<br/>";
         return $this->render();
     }
 }

@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace App\Controllers;
 
+use App\View;
+use App\Models\Invoice;
+
 class InvoiceController
 {
     public function index(): string
@@ -22,21 +25,30 @@ class InvoiceController
             time() - 10,
         );
 
-        return 'Invoices';
+        return (string) View::make("invoices/index");
     }
+
     public function create(): string
     {
-        return <<<HTML
-        <form action="/invoices/create" method="post">
-        <label for="amount">Amount</label>
-        <input type="number" name="amount" id="amount" />
-        </form>
-        HTML;
+        return (string) View::make("invoices/create");
     }
     public function store(): void
     {
-        // Gets the amount from create() form and displays it.
+        // Initialize Models in the controller.
+        $invoice = new Invoice();
+
+        // Best practice;;
+        // Form validations should be done in the controller.
+
+        // Gets the amount from create() form.
         $amount = $_POST["amount"];
-        var_dump($amount);
+
+        // NB:: A controller prepares the data e.g. Validations, Slice, Encrypt
+        // e.t.c then pass it into a Model.
+
+        // e.g. Add $13.00 VAT to amount
+        $totalAmount = (float) $amount + 13.00;
+        
+        $invoice->store($totalAmount);
     }
 }

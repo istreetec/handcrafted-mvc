@@ -54,19 +54,17 @@ class HomeController
             false
         );
 
-        return (string) View::make("index");
+        // Params are passed in the controller e.g. HomeController
+        // comming from Models, $_GET, $_POST requests into a View
+        // Then used in the view during rendering.
+        return (string) View::make("index", ["name" => "Home"]);
     }
 
     public function prepareUploads(): string
     {
         // NB:: `FORM` is the heredoc identifier which could be anything of 
         // your choice.
-        return <<<FORM
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="receipt" id="receipt" />
-            <button type="submit">Upload</button>
-        </form>
-        FORM;
+        return (string) View::make("prepare-uploads", ["foo" => "bar"]);
     }
 
     // TP:: Never trust any user input comming from the super globals.
