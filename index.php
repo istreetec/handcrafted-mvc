@@ -3,7 +3,12 @@ declare(strict_types=1);
 namespace App;
 
 use App\Exceptions\RouteNotFoundException;
-use App\Controllers\{HomeController, InvoiceController};
+use App\Controllers\{
+    HomeController,
+    InvoiceController,
+    PDOController,
+    PDOTransactionController
+};
 
 // Super Globals Usage;;
 // - Access to input from user forms
@@ -12,6 +17,10 @@ use App\Controllers\{HomeController, InvoiceController};
 // - Look into requests 
 // - e.t.c
 require_once __DIR__ . '/vendor/autoload.php';
+
+// Load .env file's environmental variables
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 // NB:: Sessions must be started before any output.
 // Best practice;;  
@@ -34,6 +43,8 @@ try {
     $route->get("/", [HomeController::class, "index"])
         ->get("/upload", [HomeController::class, "prepareUploads"])
         ->get("/download", [HomeController::class, "download"])
+        ->get("/pdo", [PDOController::class, "index"])
+        ->get("/pdo/transaction", [PDOTransactionController::class, "index"])
         ->post("/upload", [HomeController::class, "upload"])
         ->get("/invoices", [InvoiceController::class, "index"])
         ->get("/invoices/create", [InvoiceController::class, "create"])
