@@ -15,8 +15,7 @@ class Router
         string $requestMethod,
         string $route,
         callable |array $action
-    ): self
-    {
+    ): self {
         $this->routes[$requestMethod][$route] = $action;
         return $this;
     }
@@ -35,7 +34,7 @@ class Router
         return $this->routes();
     }
 
-    public function resolve(string $requestUri, string $requestMethod): ?string
+    public function resolve(string $requestUri, string $requestMethod): string|array
     {
         $route = explode("?", $requestUri)[0];
         $action = $this->routes[$requestMethod][$route] ?? null;
